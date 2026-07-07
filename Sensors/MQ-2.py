@@ -2,7 +2,7 @@ from gpiozero import DigitalInputDevice
 import time
 
 # Initialize MQ2 sensor on GPIO17
-mq2 = DigitalInputDevice(17)
+mq2 = DigitalInputDevice(27)
 
 while True:
    # Detect gas presence (LOW signal indicates gas)

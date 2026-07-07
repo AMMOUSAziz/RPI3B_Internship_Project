@@ -2,7 +2,7 @@ from gpiozero import DigitalInputDevice
 import time
 
 #Flame_Sensor on GPIO17
-flameSensor = DigitalInputDevice(17)
+flameSensor = DigitalInputDevice(22)
 
 while True:
    # Detect gas presence (LOW signal indicates flame)
