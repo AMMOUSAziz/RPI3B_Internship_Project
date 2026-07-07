@@ -10,18 +10,17 @@ import RPi.GPIO as GPIO
 import time
 
 # Set the GPIO mode and HC-SR501 PIR motion sensor pin
-def motionDetection (PIR_PIN=12):
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(PIR_PIN, GPIO.IN)
+def getStateOfMotion (PIR_PIN=12):
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setup(PIR_PIN, GPIO.IN)
 
-	try:
-   	   while True:
-        # Read the HC-SR501 PIR motion sensor value
-             pir_value = GPIO.input(PIR_PIN)
+  try:
+	# Read the HC-SR501 PIR motion sensor value
+    pir_value = GPIO.input(PIR_PIN)
+    # PIR output is high when motion is detected
+    GPIO.cleanup()
+    return (pir_value==GPIO.HIGH)            
 
-        # PIR output is high when motion is detected
-             return (pir_value==GPIO.HIGH)            
-
-	except KeyboardInterrupt:
-    	      print("Exiting...")
-    	      GPIO.cleanup()
+  except KeyboardInterrupt:
+    print("Exiting...")
+    GPIO.cleanup()

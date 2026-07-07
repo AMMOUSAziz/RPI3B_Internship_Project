@@ -2,14 +2,6 @@ from gpiozero import DigitalInputDevice
 import time
 
 # Initialize MQ2 sensor on GPIO17
-mq2 = DigitalInputDevice(27)
+def getStateOfGas(mq2 = DigitalInputDevice(27)):
+   return (mq2.value == 0) #True means that gas is detected ; False means gas is not detected
 
-while True:
-   # Detect gas presence (LOW signal indicates gas)
-   if mq2.value == 0:
-      print("Gas detected!")
-   else:
-      print("No gas detected.")
-
-   # Delay between readings
-   time.sleep(1)

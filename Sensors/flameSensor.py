@@ -2,14 +2,8 @@ from gpiozero import DigitalInputDevice
 import time
 
 #Flame_Sensor on GPIO17
-flameSensor = DigitalInputDevice(22)
 
-while True:
+def getStateOfFlame (flameSensor = DigitalInputDevice(22)):
    # Detect gas presence (LOW signal indicates flame)
-   if flameSensor.value == 0:
-      print("Flame detected!")
-   else:
-      print("No flame detected.")
+   return(flameSensor.value == 0) #True means that flame is detected ; False means flame is not detected
 
-   # Delay between readings
-   time.sleep(1)
