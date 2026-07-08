@@ -49,7 +49,7 @@ try :
   unacked_publish.add(msg_gas_info)
   looping_list.append(msg_gas_info)
 
-  msg_light_info=mqttc.publish("light",str(light),gos=1)
+  msg_light_info=mqttc.publish("light",f"{light} lux",gos=1)
   unacked_publish.add(msg_light_info)
   looping_list.append(msg_light_info)
 
