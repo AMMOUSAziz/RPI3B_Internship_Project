@@ -1,6 +1,9 @@
 import time
 import paho.mqtt.client as mqtt
-import motion_sensor
+import Sensors.motion_sensor as motion_sensor
+import Sensors.bh1750 as bh1750
+import Sensors.flameSensor as flame_sensor
+import Sensors.MQ_2 as MQ_2
 def on_publish(client, userdata, mid, reason_code, properties):
     # reason_code and properties will only be present in MQTTv5. It's always unset in MQTTv3
     try:
@@ -28,20 +31,37 @@ mqttc.loop_start()
 try :
  while True : 
 # Our application produce some messages
-  motion=motion_sensor.motionDetection()
-  msg_motion_info = mqttc.publish("test/test", str(motion), qos=1)
-  unacked_publish.add(msg_motion_info.mid)
+  motion=motion_sensor.getStateOfMotion()
+  flame=flame_sensor.getStateOfFlame()
+  gas=MQ_2.getStateOfGas()
+  light=bh1750.main()
+  looping_list=[]
 
-  msg_info2 = mqttc.publish("paho/test/topic", "my message2", qos=1)
-  unacked_publish.add(msg_info2.mid)
+  msg_motion_info = mqttc.publish("motion", str(motion), qos=1)
+  unacked_publish.add(msg_motion_info.mid)
+  looping_list.append(msg_motion_info)
+
+  msg_flame_info = mqttc.publish("flame", str(flame), qos=1)
+  unacked_publish.add(msg_flame_info.mid)
+  looping_list.append(msg_flame_info)
+
+  msg_gas_info = mqttc.publish("gas", str(gas),qos=1)
+  unacked_publish.add(msg_gas_info)
+  looping_list.append(msg_gas_info)
+
+  msg_light_info=mqttc.publish("light",str(light),gos=1)
+  unacked_publish.add(msg_light_info)
+  looping_list.append(msg_light_info)
+
+
 
 # Wait for all message to be published
   while len(unacked_publish):
-     time.sleep(0.1)
+     time.sleep(3)
 
 # Due to race-condition described above, the following way to wait for all publish is safer
-  msg_motion_info.wait_for_publish()
-  msg_info2.wait_for_publish()
+  for message in looping_list :
+     message.wait_for_publish()
 except KeyboardInterrupt : 
  mqttc.disconnect()
  mqttc.loop_stop()

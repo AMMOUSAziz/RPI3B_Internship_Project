@@ -21,7 +21,7 @@ def readLight(addr=DEVICE):
  
 def main():
  
-    return(str(readLight())," lux")
+    return(readLight())
     time.sleep(0.5)
    
 if __name__=="__main__":
