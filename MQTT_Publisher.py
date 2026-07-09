@@ -39,24 +39,23 @@ try :
   looping_list=[]
   print("test capteurs message")
 
-  msg_motion_info = mqttc.publish("motion", str(motion), qos=1)
+  msg_motion_info = mqttc.publish("motion", float(motion), qos=1)
   unacked_publish.add(msg_motion_info.mid)
   looping_list.append(msg_motion_info)
   print("test mouvement message")
 
-  msg_flame_info = mqttc.publish("flame", str(flame), qos=1)
+  msg_flame_info = mqttc.publish("flame", f'{{"flame":{float(flame)}}}', qos=1)
   unacked_publish.add(msg_flame_info.mid)
   looping_list.append(msg_flame_info)
   print("test flamme message")
 
-  msg_gas_info = mqttc.publish("gas", str(gas),qos=1)
-  unacked_publish.add(msg_gas_info)
+  msg_gas_info = mqttc.publish("gas", f'{{"gas":{float(gas)}}}',qos=1)
+  unacked_publish.add(msg_gas_info.mid)
   looping_list.append(msg_gas_info)
   print("test gaz message")
 
-
   msg_light_info=mqttc.publish("light",light,qos=1)
-  unacked_publish.add(msg_light_info)
+  unacked_publish.add(msg_light_info.mid)
   looping_list.append(msg_light_info)
   print("test lumière message")
 
