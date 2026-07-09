@@ -39,6 +39,7 @@ mqttc.on_subscribe = on_subscribe
 mqttc.on_unsubscribe = on_unsubscribe
 
 mqttc.user_data_set([])
-mqttc.connect("broker.hivemq.com")
+ip=input("please enter mqtt broker ip :")
+mqttc.connect(ip)
 mqttc.loop_forever()
 print(f"Received the following message: {mqttc.user_data_get()}")

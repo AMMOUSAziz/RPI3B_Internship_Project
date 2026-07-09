@@ -26,7 +26,8 @@ mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 mqttc.on_publish = on_publish 
 
 mqttc.user_data_set(unacked_publish)
-mqttc.connect("192.168.1.175")
+ip=input("please enter mqtt broker ip :")
+mqttc.connect(ip)
 mqttc.loop_start()
 try :
  while True : 
@@ -36,32 +37,44 @@ try :
   gas=MQ_2.getStateOfGas()
   light=bh1750.main()
   looping_list=[]
+  print("test capteurs message")
 
   msg_motion_info = mqttc.publish("motion", str(motion), qos=1)
   unacked_publish.add(msg_motion_info.mid)
   looping_list.append(msg_motion_info)
+  print("test mouvement message")
 
   msg_flame_info = mqttc.publish("flame", str(flame), qos=1)
   unacked_publish.add(msg_flame_info.mid)
   looping_list.append(msg_flame_info)
+  print("test flamme message")
 
   msg_gas_info = mqttc.publish("gas", str(gas),qos=1)
   unacked_publish.add(msg_gas_info)
   looping_list.append(msg_gas_info)
+  print("test gaz message")
 
-  msg_light_info=mqttc.publish("light",f"{light} lux",gos=1)
+
+  msg_light_info=mqttc.publish("light",light,qos=1)
   unacked_publish.add(msg_light_info)
   looping_list.append(msg_light_info)
+  print("test lumière message")
 
 
 
 # Wait for all message to be published
   while len(unacked_publish):
-     time.sleep(3)
-
+     time.sleep(0.1)
+     print("message waiting...")
+     print(list(dict.fromkeys(unacked_publish)))
+     
+  
 # Due to race-condition described above, the following way to wait for all publish is safer
   for message in looping_list :
      message.wait_for_publish()
+     print(message)
+  print("im here")
+  time.sleep(2)
 except KeyboardInterrupt : 
  mqttc.disconnect()
  mqttc.loop_stop()
