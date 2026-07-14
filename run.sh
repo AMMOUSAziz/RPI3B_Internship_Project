@@ -1,6 +1,6 @@
 count=0
 while true ;do
-     if [$count -ls 2];then 
+     if [ $count -ls 2 ];then 
         python3 alert
      fi
      else
