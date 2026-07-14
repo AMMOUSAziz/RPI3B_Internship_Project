@@ -37,9 +37,19 @@ try :
   flame=flame_sensor.getStateOfFlame()
   gas=MQ_2.getStateOfGas()
   light=bh1750.main()
-  humidity=dht11.getHumidity()
-  temperature=dht11.getTemperature()
+
+  try: 
+    humidity=dht11.getHumidity()
+  except RuntimeError as e :
+    print("Humidity not reached")
+
+  try :
+   temperature=dht11.getTemperature()
+  except RuntimeError as e :
+    print("Temperature not reached")
   looping_list=[]
+
+
   print("test capteurs message")
 
   msg_motion_info = mqttc.publish("motion", float(motion), qos=1)
@@ -66,11 +76,12 @@ try :
   unacked_publish.add(msg_humidity_info.mid)
   looping_list.append(msg_humidity_info)
   print("test humidité message")
-
+  
   msg_temperature_info=mqttc.publish("temperature",f'{{"temperature":{float(temperature)}}}',qos=1)
   unacked_publish.add(msg_temperature_info.mid)
   looping_list.append(msg_temperature_info)
   print("test température message")
+
 
 
 # Wait for all message to be published
@@ -86,6 +97,7 @@ try :
      print(message)
   print("im here")
   time.sleep(2)
+
 except KeyboardInterrupt : 
   mqttc.disconnect()
   mqttc.loop_stop()
