@@ -4,6 +4,7 @@ import Sensors.motion_sensor as motion_sensor
 import Sensors.bh1750 as bh1750
 import Sensors.flameSensor as flame_sensor
 import Sensors.MQ_2 as MQ_2
+import Sensors.dht11 as dht11
 def on_publish(client, userdata, mid, reason_code, properties):
     # reason_code and properties will only be present in MQTTv5. It's always unset in MQTTv3
     try:
@@ -29,53 +30,62 @@ mqttc.user_data_set(unacked_publish)
 ip=input("please enter mqtt broker ip :")
 mqttc.connect(ip)
 mqttc.loop_start()
-try :
- while True : 
+
 # Our application produce some messages
-  motion=motion_sensor.getStateOfMotion()
-  flame=flame_sensor.getStateOfFlame()
-  gas=MQ_2.getStateOfGas()
-  light=bh1750.main()
-  looping_list=[]
-  print("test capteurs message")
+motion=motion_sensor.getStateOfMotion()
+flame=flame_sensor.getStateOfFlame()
+gas=MQ_2.getStateOfGas()
+light=bh1750.main()
+humidity=dht11.getHumidity()
+temperature=dht11.getTemperature()
+looping_list=[]
+print("test capteurs message")
 
-  msg_motion_info = mqttc.publish("motion", float(motion), qos=1)
-  unacked_publish.add(msg_motion_info.mid)
-  looping_list.append(msg_motion_info)
-  print("test mouvement message")
+msg_motion_info = mqttc.publish("motion", float(motion), qos=1)
+unacked_publish.add(msg_motion_info.mid)
+looping_list.append(msg_motion_info)
+print("test mouvement message")
 
-  msg_flame_info = mqttc.publish("flame", f'{{"flame":{float(flame)}}}', qos=1)
-  unacked_publish.add(msg_flame_info.mid)
-  looping_list.append(msg_flame_info)
-  print("test flamme message")
+msg_flame_info = mqttc.publish("flame", f'{{"flame":{float(flame)}}}', qos=1)
+unacked_publish.add(msg_flame_info.mid)
+looping_list.append(msg_flame_info)
+print("test flamme message")
 
-  msg_gas_info = mqttc.publish("gas", f'{{"gas":{float(gas)}}}',qos=1)
-  unacked_publish.add(msg_gas_info.mid)
-  looping_list.append(msg_gas_info)
-  print("test gaz message")
+msg_gas_info = mqttc.publish("gas", f'{{"gas":{float(gas)}}}',qos=1)
+unacked_publish.add(msg_gas_info.mid)
+looping_list.append(msg_gas_info)
+print("test gaz message")
 
-  msg_light_info=mqttc.publish("light",light,qos=1)
-  unacked_publish.add(msg_light_info.mid)
-  looping_list.append(msg_light_info)
-  print("test lumière message")
+msg_light_info=mqttc.publish("light",f'{{"light":{float(light)}}}',qos=1)
+unacked_publish.add(msg_light_info.mid)
+looping_list.append(msg_light_info)
+print("test lumière message")
 
+msg_humidity_info=mqttc.publish("humidity",f'{{"humidity":{float(humidity)}}}',qos=1)
+unacked_publish.add(msg_humidity_info.mid)
+looping_list.append(msg_humidity_info)
+print("test humidité message")
+
+msg_temperature_info=mqttc.publish("temperature",f'{{"temperature":{float(temperature)}}}',qos=1)
+unacked_publish.add(msg_temperature_info.mid)
+looping_list.append(msg_temperature_info)
+print("test température message")
 
 
 # Wait for all message to be published
-  while len(unacked_publish):
+while len(unacked_publish):
      time.sleep(0.1)
      print("message waiting...")
      print(list(dict.fromkeys(unacked_publish)))
      
   
 # Due to race-condition described above, the following way to wait for all publish is safer
-  for message in looping_list :
+for message in looping_list :
      message.wait_for_publish()
      print(message)
-  print("im here")
-  time.sleep(2)
-except KeyboardInterrupt : 
- mqttc.disconnect()
- mqttc.loop_stop()
+print("im here")
+time.sleep(2)
+mqttc.disconnect()
+mqttc.loop_stop()
 
 
