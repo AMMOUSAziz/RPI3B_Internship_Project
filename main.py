@@ -133,24 +133,29 @@ def loop_motion_sensor():
 #
 #
 #
-t_loop_bh1750 = threading.Thread(target=loop_bh1750)
-t_loop_dht11 = threading.Thread(target=loop_dht11)
-t_loop_flameSensor = threading.Thread(target=loop_flameSensor)
-t_loop_MQ_2 = threading.Thread(target=loop_MQ_2)
-t_loop_motion_sensor=threading.Thread(target=loop_motion_sensor)
-t_loop_alert=threading.Thread(target=alert)
+try : 
+
+ t_loop_bh1750 = threading.Thread(target=loop_bh1750)
+ t_loop_dht11 = threading.Thread(target=loop_dht11)
+ t_loop_flameSensor = threading.Thread(target=loop_flameSensor)
+ t_loop_MQ_2 = threading.Thread(target=loop_MQ_2)
+ t_loop_motion_sensor=threading.Thread(target=loop_motion_sensor)
+ t_loop_alert=threading.Thread(target=alert)
 
 
-t_loop_bh1750.start()
-t_loop_dht11.start()
-t_loop_flameSensor.start()
-t_loop_MQ_2.start()
-t_loop_motion_sensor.start()
-t_loop_alert.start()
+ t_loop_bh1750.start()
+ t_loop_dht11.start()
+ t_loop_flameSensor.start()
+ t_loop_MQ_2.start()
+ t_loop_motion_sensor.start()
+ t_loop_alert.start()
 
-t_loop_bh1750.join()
-t_loop_dht11.join()
-t_loop_flameSensor.join()
-t_loop_MQ_2.join()
-t_loop_motion_sensor.join()
-t_loop_alert.join()
+ t_loop_bh1750.join()
+ t_loop_dht11.join()
+ t_loop_flameSensor.join()
+ t_loop_MQ_2.join()
+ t_loop_motion_sensor.join()
+ t_loop_alert.join()
+
+except KeyboardInterrupt :
+  MQTT_Publisher_sending_messages.disconnect(mqttc)
