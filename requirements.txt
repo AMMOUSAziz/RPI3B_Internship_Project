@@ -1,0 +1,6 @@
+adafruit_blinka==9.1.0
+adafruit_circuitpython_dht==4.0.12
+adafruit_dht==1.4.0
+gpiozero==2.0.1
+paho_mqtt==2.1.0
+smbus==1.1.post2
