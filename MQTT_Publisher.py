@@ -31,7 +31,7 @@ ip=input("please enter mqtt broker ip :")
 mqttc.connect(ip)
 mqttc.loop_start()
 try :
- while True 
+ while True :
    # Our application produce some messages
   motion=motion_sensor.getStateOfMotion()
   flame=flame_sensor.getStateOfFlame()
