@@ -3,17 +3,20 @@ import Buzzer.Buzzer as Buzzer
 import Sensors.button as Button
 import time
 def main(StateOfFlame,StateOfGas): 
- while True :
-  while StateOfFlame or StateOfGas : 
-     LED.setLedColor(1,0,0)
-     Buzzer.BuzzStart()
- 
-     time.sleep(1)
- 
-     LED.setLedColor(0,0,0)
-     Buzzer.BuzzStop()
-    
-     time.sleep(0.5)
-     if Button.getStateOfButton: 
-         break
+  while True : 
+   while StateOfFlame or StateOfGas : 
+      print("time to panic !")
+      LED.setLedColor(1,0,0)
+      Buzzer.BuzzStart()
+  
+      time.sleep(1)
+  
+      LED.setLedColor(0,0,0)
+      Buzzer.BuzzStop()
+     
+      time.sleep(0.5)
+      if Button.getStateOfButton(): 
+          print("INTERRUPT ALERT SIGNAL")
+          break
+
 
